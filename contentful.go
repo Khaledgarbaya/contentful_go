@@ -2,11 +2,10 @@ package contentful
 import(
 //	"fmt"
 	"log"
+	"bytes"
 	"net/http"
 //	"net/url"
 )
-// Constants
-// const contentfulClient http.Client = http.Client{}
 const baseUrl string = "https://cdn.contentful.com/"
 
 type Contentful struct{
@@ -17,7 +16,7 @@ type Contentful struct{
 func (c Contentful) GetEntry(entryId string) string{
 	req := c.makeRequest("GET", "entries/"+entryId)
 
- // For control over HTTP client headers,
+  // For control over HTTP client headers,
 	// redirect policy, and other settings,
 	// create a Client
 	// A Client is an HTTP client
@@ -29,26 +28,27 @@ func (c Contentful) GetEntry(entryId string) string{
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal("Do: ", err)
-		return
+		return ""
 	}
 
 	// Callers should close resp.Body
 	// when done reading from it
 	// Defer the closing of the body
 	defer resp.Body.Close()
-  
-	return resp.Body
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(resp.Body)
+	s := buf.String() // Does a complete copy of the bytes in the buffer.
+	return s
 }
 
 // main entry point =============================================================================
 func CreateClient(spaceId, accessToken string) Contentful {
-  return Contentful{spaceId, accessToken} 
+  return Contentful{spaceId, accessToken}
 }
 
 // utils methods =================================================================================
 func (c Contentful)makeRequest(method, path string) *http.Request{
-	req,err := http.NewRequest(method, baseUrl+path, nil)
-	
+	req,err := http.NewRequest(method, baseUrl+"/spaces/"+c.spaceId+"/"+path, nil)
 	if err != nil {
     log.Fatal("NewRequest: ", err)
 		return nil
