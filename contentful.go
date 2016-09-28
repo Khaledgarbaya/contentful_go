@@ -3,6 +3,7 @@ package contentful
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -10,13 +11,12 @@ import (
 const baseUrl string = "https://cdn.contentful.com/"
 
 type Contentful struct {
-	accessToken, spaceId string
+	spaceId, accessToken string
 }
 
 // client methods =============================================================================
 func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
-	var e Entry
-	fmt.Println(entryId)
+	e := Entry{}
 
 	req := c.makeRequest("GET", "entries/"+entryId)
 
@@ -28,10 +28,10 @@ func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
 	}
 
 	defer resp.Body.Close()
-	if err := json.NewDecoder(resp.Body).Decode(&e); err != nil {
+	body, err := ioutil.ReadAll(resp.Body)
+	if err := json.Unmarshal(body, &e); err != nil {
 		return e, fmt.Errorf("decode entity %v", err)
 	}
-	fmt.Println(e.Id == "")
 	return e, nil
 }
 

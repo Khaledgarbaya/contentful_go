@@ -15,8 +15,8 @@ func TestGetEntry(t *testing.T) {
 	if err != nil {
 		t.Error(fmt.Sprintf("expected err == nil got %v", err))
 	}
-	if !strings.EqualFold(entry.Id, entryId) {
-		t.Error(fmt.Sprintf("Expected %s got %s", entryId, entry.Id))
+	if !strings.EqualFold(entry.Sys.Id, entryId) {
+		t.Error(fmt.Sprintf("Expected %s got %s", entryId, entry.Sys.Id))
 		t.Fail()
 	}
 }

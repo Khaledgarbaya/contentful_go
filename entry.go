@@ -1,6 +1,7 @@
 package contentful
 
 type Entry struct {
-	Id  string
-	Sys struct{}
+	Sys struct {
+		Id string `json:"id"`
+	}
 }
