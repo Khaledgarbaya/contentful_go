@@ -1,56 +1,69 @@
 package contentful
-import(
-//	"fmt"
+
+import (
+	"encoding/json"
+	"fmt"
 	"log"
-	"bytes"
 	"net/http"
-//	"net/url"
 )
+
 const baseUrl string = "https://cdn.contentful.com/"
 
-type Contentful struct{
+type Contentful struct {
 	accessToken, spaceId string
 }
 
 // client methods =============================================================================
-func (c Contentful) GetEntry(entryId string) string{
+func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
+	var e Entry
 	req := c.makeRequest("GET", "entries/"+entryId)
 
-  // For control over HTTP client headers,
-	// redirect policy, and other settings,
-	// create a Client
-	// A Client is an HTTP client
 	client := &http.Client{}
 
-	// Send the request via a client
-	// Do sends an HTTP request and
-	// returns an HTTP response
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal("Do: ", err)
-		return ""
+		return e, fmt.Errorf("performing request %v", err)
 	}
 
-	// Callers should close resp.Body
-	// when done reading from it
-	// Defer the closing of the body
 	defer resp.Body.Close()
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(resp.Body)
-	s := buf.String() // Does a complete copy of the bytes in the buffer.
-	return s
+	if err := json.NewDecoder(resp.Body).Decode(&e); err != nil {
+		return e, fmt.Errorf("decode entity %v", err)
+	}
+	return e, nil
 }
 
-// main entry point =============================================================================
+func (c Contentful) GetEntries() (entries []Entry, err error) {
+	return nil, nil
+}
+
+func (c Contentful) GetContentTypes() (contentTypes []ContentType, err error) {
+	return nil, nil
+}
+func (c Contentful) GetContentType(contentTypeId string) (contentType ContentType, err error) {
+	var ct ContentType
+	return ct, nil
+}
+
+func (c Contentful) GetSpaces() (spaces []Space, err error) {
+	return nil, nil
+}
+func (c Contentful) GetSpace(spaceId string) (space Space, err error) {
+	var s Space
+	return s, nil
+}
+
+// Create a contentful client
+// This is the main entry point
 func CreateClient(spaceId, accessToken string) Contentful {
-  return Contentful{spaceId, accessToken}
+	return Contentful{spaceId, accessToken}
 }
 
 // utils methods =================================================================================
-func (c Contentful)makeRequest(method, path string) *http.Request{
-	req,err := http.NewRequest(method, baseUrl+"/spaces/"+c.spaceId+"/"+path, nil)
+func (c Contentful) makeRequest(method, path string) *http.Request {
+	fmt.Println("Hello")
+	req, err := http.NewRequest(method, baseUrl+"/spaces/"+c.spaceId+"/"+path, nil)
 	if err != nil {
-    log.Fatal("NewRequest: ", err)
+		log.Fatal("NewRequest: ", err)
 		return nil
 	}
 
