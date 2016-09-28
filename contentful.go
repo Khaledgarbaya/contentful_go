@@ -16,6 +16,8 @@ type Contentful struct {
 // client methods =============================================================================
 func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
 	var e Entry
+	fmt.Println(entryId)
+
 	req := c.makeRequest("GET", "entries/"+entryId)
 
 	client := &http.Client{}
@@ -29,6 +31,7 @@ func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
 	if err := json.NewDecoder(resp.Body).Decode(&e); err != nil {
 		return e, fmt.Errorf("decode entity %v", err)
 	}
+	fmt.Println(e.Id == "")
 	return e, nil
 }
 
@@ -60,7 +63,6 @@ func CreateClient(spaceId, accessToken string) Contentful {
 
 // utils methods =================================================================================
 func (c Contentful) makeRequest(method, path string) *http.Request {
-	fmt.Println("Hello")
 	req, err := http.NewRequest(method, baseUrl+"/spaces/"+c.spaceId+"/"+path, nil)
 	if err != nil {
 		log.Fatal("NewRequest: ", err)
