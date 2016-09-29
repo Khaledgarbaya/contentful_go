@@ -1,5 +1,7 @@
 package contentful
 
+import "github.com/Khaledgarbaya/contentful/entities"
+
 type ContentType struct {
-	Sys struct{}
+	Sys entities.Sys
 }

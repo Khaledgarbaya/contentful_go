@@ -1,3 +1,6 @@
+/*
+Package contentful interactes with Conetenful's Delivery API https://contentful.com/developers
+*/
 package contentful
 
 import (
@@ -14,7 +17,23 @@ type Contentful struct {
 	spaceId, accessToken string
 }
 
-// client methods =============================================================================
+/*
+Creates contentful client
+Example:
+		client := contentful.CreateClient('SPACE_ID', 'DELIVERY_ACESS_TOKEN')
+*/
+func CreateClient(spaceId, accessToken string) Contentful {
+	return Contentful{spaceId, accessToken}
+}
+
+/*
+Gets an Entry
+Example:
+		client := contentful.CreateClient('SPACE_ID', 'ACCESS_TOKEN')
+		entry, err := client.GetEntry('ENTRY_ID')
+		fmt.Printf("got entry with id %s", entry.Sys.Id)
+It returns a pointer to an Entry object prefilled with response data
+*/
 func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
 	e := Entry{}
 
@@ -53,12 +72,6 @@ func (c Contentful) GetSpaces() (spaces []Space, err error) {
 func (c Contentful) GetSpace(spaceId string) (space Space, err error) {
 	var s Space
 	return s, nil
-}
-
-// Create a contentful client
-// This is the main entry point
-func CreateClient(spaceId, accessToken string) Contentful {
-	return Contentful{spaceId, accessToken}
 }
 
 // utils methods =================================================================================
