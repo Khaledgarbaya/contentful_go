@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -109,20 +108,19 @@ func (c Contentful) GetSpace(spaceId string) (space Space, err error) {
 }
 
 // utils methods =================================================================================
-func (c Contentful) makeRequest(method, path string) *http.Request {
+func (c Contentful) makeRequest(method, path string) (request *http.Request, err error) {
 	req, err := http.NewRequest(method, baseUrl+"/"+path, nil)
 	if err != nil {
-		log.Fatal("NewRequest: ", err)
-		return nil
+		return nil, fmt.Errorf("error making request: ", err)
 	}
 
 	req.Header.Set("Authorization", "Bearer "+c.accessToken)
 	req.Header.Set("Content-Type", "application/vnd.contentful.delivery.v1+json")
 	req.Header.Set("X-Contentful-User-Agent", "contentful.go/1.0") // hardcoded for now
-	return req
+	return req, nil
 }
 func (c Contentful) performeRequest(method, path string) (reader io.Reader, err error) {
-	req := c.makeRequest(method, path)
+	req, err := c.makeRequest(method, path)
 
 	client := &http.Client{}
 
