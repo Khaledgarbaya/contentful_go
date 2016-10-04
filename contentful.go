@@ -49,8 +49,17 @@ func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
 //  		client := contentful.CreateClient("SPACE_ID", "ACCESS_TOKEN")
 //  		entries, _ := client.GetEntries()
 //  		fmt.Printf("got entry with id %s", entries.items[0].Sys.Id)
-func (c Contentful) GetEntries() (entries []Entry, err error) {
-	return nil, nil
+func (c Contentful) GetEntries() (entriesCollection Collection, err error) {
+	ec := Collection{}
+	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/entries/")
+	if err != nil {
+		return ec, err
+	}
+	body, err := ioutil.ReadAll(reader)
+	if err := json.Unmarshal(body, &ec); err != nil {
+		return ec, fmt.Errorf("decode entity %v", err)
+	}
+	return ec, nil
 }
 
 // Gets a collection of contentTypes
@@ -58,8 +67,17 @@ func (c Contentful) GetEntries() (entries []Entry, err error) {
 //  		client := contentful.CreateClient("SPACE_ID", "ACCESS_TOKEN")
 //  		contentTypes, _ := client.GetContentTypes()
 //  		fmt.Printf("got contentType with id %s", contentTypes.items[0].Sys.Id)
-func (c Contentful) GetContentTypes() (contentTypes []ContentType, err error) {
-	return nil, nil
+func (c Contentful) GetContentTypes() (contentTypesCollection Collection, err error) {
+	ctc := Collection{}
+	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/content_types/")
+	if err != nil {
+		return ctc, err
+	}
+	body, err := ioutil.ReadAll(reader)
+	if err := json.Unmarshal(body, &ctc); err != nil {
+		return ctc, fmt.Errorf("decode entity %v", err)
+	}
+	return ctc, nil
 }
 
 // Gets a ContentType

@@ -44,3 +44,23 @@ func TestGetContentType(t *testing.T) {
 		t.Fail()
 	}
 }
+func TestGetEntries(t *testing.T) {
+	client := contentful.CreateClient("cfexampleapi", "b4c0n73n7fu1")
+	entities, err := client.GetEntries()
+	if err != nil {
+		t.Error(fmt.Sprintf("expected err == nil got %v", err))
+	}
+	if len(entities.Items) == 0 {
+		t.Fail()
+	}
+}
+func TestGetContentTypes(t *testing.T) {
+	client := contentful.CreateClient("cfexampleapi", "b4c0n73n7fu1")
+	contentTypes, err := client.GetContentTypes()
+	if err != nil {
+		t.Error(fmt.Sprintf("expected err == nil got %v", err))
+	}
+	if len(contentTypes.Items) == 0 {
+		t.Fail()
+	}
+}
