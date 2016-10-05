@@ -39,7 +39,7 @@ func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
 	}
 	body, err := ioutil.ReadAll(reader)
 	if err := json.Unmarshal(body, &e); err != nil {
-		return e, fmt.Errorf("decode entity %v", err)
+		return e, fmt.Errorf("error while decoding the json response %v", err)
 	}
 	return e, nil
 }
@@ -57,7 +57,7 @@ func (c Contentful) GetEntries() (entriesCollection Collection, err error) {
 	}
 	body, err := ioutil.ReadAll(reader)
 	if err := json.Unmarshal(body, &ec); err != nil {
-		return ec, fmt.Errorf("decode entity %v", err)
+		return ec, fmt.Errorf("error while decoding the json response %v", err)
 	}
 	return ec, nil
 }
@@ -75,7 +75,7 @@ func (c Contentful) GetContentTypes() (contentTypesCollection Collection, err er
 	}
 	body, err := ioutil.ReadAll(reader)
 	if err := json.Unmarshal(body, &ctc); err != nil {
-		return ctc, fmt.Errorf("decode entity %v", err)
+		return ctc, fmt.Errorf("error while decoding the json response %v", err)
 	}
 	return ctc, nil
 }
@@ -93,18 +93,9 @@ func (c Contentful) GetContentType(contentTypeId string) (contentType ContentTyp
 	}
 	body, err := ioutil.ReadAll(reader)
 	if err := json.Unmarshal(body, &ct); err != nil {
-		return ct, fmt.Errorf("decode entity %v", err)
+		return ct, fmt.Errorf("error while decoding the json response %v", err)
 	}
 	return ct, nil
-}
-
-// Gets a collection of Spaces
-// Example:
-//  		client := contentful.CreateClient("SPACE_ID", "ACCESS_TOKEN")
-//  		spaces, _ := client.GetSpaces()
-//  		fmt.Printf("got space with id %s", spaces.items[0].Sys.Id)
-func (c Contentful) GetSpaces() (spaces []Space, err error) {
-	return nil, nil
 }
 
 // Gets a Space
@@ -120,7 +111,7 @@ func (c Contentful) GetSpace(spaceId string) (space Space, err error) {
 	}
 	body, err := ioutil.ReadAll(reader)
 	if err := json.Unmarshal(body, &s); err != nil {
-		return s, fmt.Errorf("decode entity %v", err)
+		return s, fmt.Errorf("error while decoding the json response %v", err)
 	}
 	return s, nil
 }
