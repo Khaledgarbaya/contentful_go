@@ -10,8 +10,8 @@ import (
 
 func TestGetEntry(t *testing.T) {
 	var entryId string = "nyancat"
-	client := contentful.CreateClient("cfexampleapi", "b4c0n73n7fu1")
-	entry, err := client.GetEntry(entryId)
+	client := createClient()
+	entry, err := client.GetEntry(entryId, nil)
 	if err != nil {
 		t.Error(fmt.Sprintf("expected err == nil got %v", err))
 	}
@@ -22,8 +22,8 @@ func TestGetEntry(t *testing.T) {
 }
 func TestGetSpace(t *testing.T) {
 	var spaceId string = "cfexampleapi"
-	client := contentful.CreateClient("cfexampleapi", "b4c0n73n7fu1")
-	space, err := client.GetSpace(spaceId)
+	client := createClient()
+	space, err := client.GetSpace(spaceId, nil)
 	if err != nil {
 		t.Error(fmt.Sprintf("expected err == nil got %v", err))
 	}
@@ -34,8 +34,8 @@ func TestGetSpace(t *testing.T) {
 }
 func TestGetContentType(t *testing.T) {
 	var contentTypeId string = "cat"
-	client := contentful.CreateClient("cfexampleapi", "b4c0n73n7fu1")
-	contentType, err := client.GetContentType(contentTypeId)
+	client := createClient()
+	contentType, err := client.GetContentType(contentTypeId, nil)
 	if err != nil {
 		t.Error(fmt.Sprintf("expected err == nil got %v", err))
 	}
@@ -45,8 +45,8 @@ func TestGetContentType(t *testing.T) {
 	}
 }
 func TestGetEntries(t *testing.T) {
-	client := contentful.CreateClient("cfexampleapi", "b4c0n73n7fu1")
-	entities, err := client.GetEntries()
+	client := createClient()
+	entities, err := client.GetEntries(nil)
 	if err != nil {
 		t.Error(fmt.Sprintf("expected err == nil got %v", err))
 	}
@@ -55,12 +55,15 @@ func TestGetEntries(t *testing.T) {
 	}
 }
 func TestGetContentTypes(t *testing.T) {
-	client := contentful.CreateClient("cfexampleapi", "b4c0n73n7fu1")
-	contentTypes, err := client.GetContentTypes()
+	client := createClient()
+	contentTypes, err := client.GetContentTypes(nil)
 	if err != nil {
 		t.Error(fmt.Sprintf("expected err == nil got %v", err))
 	}
 	if len(contentTypes.Items) == 0 {
 		t.Fail()
 	}
+}
+func createClient() contentful.Contentful {
+	return contentful.CreateClient("cfexampleapi", "b4c0n73n7fu1")
 }

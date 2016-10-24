@@ -31,9 +31,9 @@ func CreateClient(spaceId, accessToken string) Contentful {
 //  		entry, _ := client.GetEntry("ENTRY_ID")
 //  		fmt.Printf("got entry with id %s", entry.Sys.Id)
 // It returns a pointer to an Entry object prefilled with response data
-func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
+func (c Contentful) GetEntry(entryId string, query map[string]string) (entry Entry, err error) {
 	e := Entry{}
-	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/entries/"+entryId)
+	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/entries/"+entryId, query)
 	if err != nil {
 		return e, err
 	}
@@ -49,9 +49,9 @@ func (c Contentful) GetEntry(entryId string) (entry Entry, err error) {
 //  		client := contentful.CreateClient("SPACE_ID", "ACCESS_TOKEN")
 //  		entries, _ := client.GetEntries()
 //  		fmt.Printf("got entry with id %s", entries.items[0].Sys.Id)
-func (c Contentful) GetEntries() (entriesCollection Collection, err error) {
+func (c Contentful) GetEntries(query map[string]string) (entriesCollection Collection, err error) {
 	ec := Collection{}
-	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/entries/")
+	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/entries/", query)
 	if err != nil {
 		return ec, err
 	}
@@ -67,9 +67,9 @@ func (c Contentful) GetEntries() (entriesCollection Collection, err error) {
 //  		client := contentful.CreateClient("SPACE_ID", "ACCESS_TOKEN")
 //  		contentTypes, _ := client.GetContentTypes()
 //  		fmt.Printf("got contentType with id %s", contentTypes.items[0].Sys.Id)
-func (c Contentful) GetContentTypes() (contentTypesCollection Collection, err error) {
+func (c Contentful) GetContentTypes(query map[string]string) (contentTypesCollection Collection, err error) {
 	ctc := Collection{}
-	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/content_types/")
+	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/content_types/", query)
 	if err != nil {
 		return ctc, err
 	}
@@ -85,9 +85,9 @@ func (c Contentful) GetContentTypes() (contentTypesCollection Collection, err er
 //  		client := contentful.CreateClient("SPACE_ID", "ACCESS_TOKEN")
 //  		contentType, _ := client.GetContentType("contentTypeId")
 //  		fmt.Printf("got entry with id %s", contentType.Sys.Id)
-func (c Contentful) GetContentType(contentTypeId string) (contentType ContentType, err error) {
+func (c Contentful) GetContentType(contentTypeId string, query map[string]string) (contentType ContentType, err error) {
 	ct := ContentType{}
-	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/content_types/"+contentTypeId)
+	reader, err := c.performeRequest("GET", "spaces/"+c.spaceId+"/content_types/"+contentTypeId, query)
 	if err != nil {
 		return ct, err
 	}
@@ -103,9 +103,9 @@ func (c Contentful) GetContentType(contentTypeId string) (contentType ContentTyp
 //  		client := contentful.CreateClient("SPACE_ID", "ACCESS_TOKEN")
 //  		space, _ := client.GetSpace("spaceId")
 //  		fmt.Printf("got space with id %s", spcae.Sys.Id)
-func (c Contentful) GetSpace(spaceId string) (space Space, err error) {
+func (c Contentful) GetSpace(spaceId string, query map[string]string) (space Space, err error) {
 	s := Space{}
-	reader, err := c.performeRequest("GET", "spaces/"+spaceId)
+	reader, err := c.performeRequest("GET", "spaces/"+spaceId, query)
 	if err != nil {
 		return s, err
 	}
@@ -128,9 +128,15 @@ func (c Contentful) makeRequest(method, path string) (request *http.Request, err
 	req.Header.Set("X-Contentful-User-Agent", "contentful.go/1.0") // hardcoded for now
 	return req, nil
 }
-func (c Contentful) performeRequest(method, path string) (reader io.Reader, err error) {
+func (c Contentful) performeRequest(method, path string, query map[string]string) (reader io.Reader, err error) {
 	req, err := c.makeRequest(method, path)
-
+	if query != nil && len(query) > 0 {
+		q := req.URL.Query()
+		for k, v := range query {
+			q.Add(k, v)
+		}
+		req.URL.RawQuery = q.Encode()
+	}
 	client := &http.Client{}
 
 	resp, err := client.Do(req)
