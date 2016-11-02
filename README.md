@@ -3,6 +3,10 @@ contetnful sdk client built on top of golang
 
 ## This is not an official SDK, I built it to learn the GO programming Language
 
+## DO NOT USE THIS FOR PRODUCTION 
+
+## SUPER EXPERIMENTAL 
+
 # About
 
 [Contentful](https://www.contentful.com) is a content management platform for web applications, mobile apps and connected devices. It allows you to create, edit & manage content in the cloud and publish it anywhere via a powerful API. Contentful offers tools for managing editorial teams and enabling cooperation between organizations.
