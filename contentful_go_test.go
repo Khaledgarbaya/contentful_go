@@ -21,7 +21,7 @@ func TestGetEntry(t *testing.T) {
 func TestGetSpace(t *testing.T) {
 	var spaceId string = "cfexampleapi"
 	client := createClient()
-	space, err := client.GetSpace(spaceId, nil)
+	space, err := client.GetSpace(nil)
 	if err != nil {
 		t.Error(fmt.Sprintf("expected err == nil got %v", err))
 	}
