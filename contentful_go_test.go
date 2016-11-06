@@ -1,11 +1,11 @@
-package contentful_test
+package contentful_go_test
 
 import (
 	"fmt"
 	"strings"
 	"testing"
 
-	"github.com/Khaledgarbaya/contentful.go/contentful"
+	"github.com/Khaledgarbaya/contentful_go"
 )
 
 func TestGetEntry(t *testing.T) {
@@ -64,6 +64,6 @@ func TestGetContentTypes(t *testing.T) {
 		t.Fail()
 	}
 }
-func createClient() contentful.Contentful {
-	return contentful.New("cfexampleapi", "b4c0n73n7fu1")
+func createClient() contentful_go.Contentful {
+	return contentful_go.New("cfexampleapi", "b4c0n73n7fu1")
 }

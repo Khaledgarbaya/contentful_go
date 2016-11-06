@@ -1,6 +1,6 @@
-package contentful
+package contentful_go
 
-import "github.com/Khaledgarbaya/contentful.go/contentful/entities"
+import "github.com/Khaledgarbaya/contentful_go/entities"
 
 type Collection struct {
 	Sys   entities.Sys  `json: "sys"`
