@@ -31,6 +31,6 @@ import(
 contentful := contentful_go.New("SPACE_ID", "DELIVERY_TOKEN")
 
 // get an entry 
-entry := contentful.GetEntry("ENTRY_ID")
+entry, _ := contentful.GetEntry("ENTRY_ID")
 fmt.Printf("found entry with the name %s", entry.Name)
 ```
