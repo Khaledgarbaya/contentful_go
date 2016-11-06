@@ -65,5 +65,5 @@ func TestGetContentTypes(t *testing.T) {
 	}
 }
 func createClient() contentful.Contentful {
-	return contentful.CreateClient("cfexampleapi", "b4c0n73n7fu1")
+	return contentful.New("cfexampleapi", "b4c0n73n7fu1")
 }
