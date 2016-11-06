@@ -33,7 +33,8 @@ func New(spaceId, accessToken string) Contentful {
 // It returns a pointer to an Entry object prefilled with response data
 func (c Contentful) GetEntry(entryId string, query map[string]string) (entry Entry, err error) {
 	e := Entry{}
-	body, err := c.performRequest("GET", "spaces/"+c.spaceId+"/entries/"+entryId, query)
+	path := "spaces/%s/entries/%s"
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId, entryId), query)
 	if err != nil {
 		return e, err
 	}
@@ -50,7 +51,8 @@ func (c Contentful) GetEntry(entryId string, query map[string]string) (entry Ent
 //  		fmt.Printf("got entry with id %s", entries.items[0].Sys.Id)
 func (c Contentful) GetEntries(query map[string]string) (entriesCollection Collection, err error) {
 	ec := Collection{}
-	body, err := c.performRequest("GET", "spaces/"+c.spaceId+"/entries/", query)
+	path := "spaces/%s/entries/"
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId), query)
 	if err != nil {
 		return ec, err
 	}
@@ -67,7 +69,8 @@ func (c Contentful) GetEntries(query map[string]string) (entriesCollection Colle
 //  		fmt.Printf("got contentType with id %s", contentTypes.items[0].Sys.Id)
 func (c Contentful) GetContentTypes(query map[string]string) (contentTypesCollection Collection, err error) {
 	ctc := Collection{}
-	body, err := c.performRequest("GET", "spaces/"+c.spaceId+"/content_types/", query)
+	path := "spaces/%s/content_types/"
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId), query)
 	if err != nil {
 		return ctc, err
 	}
@@ -84,7 +87,8 @@ func (c Contentful) GetContentTypes(query map[string]string) (contentTypesCollec
 //  		fmt.Printf("got entry with id %s", contentType.Sys.Id)
 func (c Contentful) GetContentType(contentTypeId string, query map[string]string) (contentType ContentType, err error) {
 	ct := ContentType{}
-	body, err := c.performRequest("GET", "spaces/"+c.spaceId+"/content_types/"+contentTypeId, query)
+	path := "spaces/%s/content_types/%s"
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId, contentTypeId), query)
 	if err != nil {
 		return ct, err
 	}
@@ -99,9 +103,10 @@ func (c Contentful) GetContentType(contentTypeId string, query map[string]string
 //  		client := contentful.New("SPACE_ID", "ACCESS_TOKEN")
 //  		space, _ := client.GetSpace("spaceId")
 //  		fmt.Printf("got space with id %s", spcae.Sys.Id)
-func (c Contentful) GetSpace(spaceId string, query map[string]string) (space Space, err error) {
+func (c Contentful) GetSpace(query map[string]string) (space Space, err error) {
 	s := Space{}
-	body, err := c.performRequest("GET", "spaces/"+spaceId, query)
+	path := "spaces/%s/"
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId), query)
 	if err != nil {
 		return s, err
 	}
