@@ -1,4 +1,5 @@
-# contentful.go
+[![Build Status](https://travis-ci.org/Khaledgarbaya/contentful.go.svg?branch=master)](https://travis-ci.org/Khaledgarbaya/contentful.go)
+# contentful_go
 contetnful sdk client built on top of golang
 
 ## This is unofficial SDK, I built it to learn the GO programming Language DO NOT USE THIS FOR PRODUCTION 
@@ -23,11 +24,11 @@ For more information, check the Contentful's REST API reference on [Authenticati
 import(
   "fmt"
   
-  "github.com/Khaledgarbaya/contentful"
+  "github.com/Khaledgarbaya/contentful_go"
 )
 // first create a contentful client
 // token and space id you can get once you create a space 
-contentful := contentful.CreateClient("SPACE_ID", "DELIVERY_TOKEN")
+contentful := contentful_go.New("SPACE_ID", "DELIVERY_TOKEN")
 
 // get an entry 
 entry := contentful.GetEntry("ENTRY_ID")
