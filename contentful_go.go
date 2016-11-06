@@ -1,7 +1,7 @@
 /*
 Package contentful interactes with Conetenful's Delivery API https://contentful.com/developers
 */
-package contentful
+package contentful_go
 
 import (
 	"encoding/json"
