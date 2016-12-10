@@ -1,5 +1,5 @@
 /*
-Package contentful interactes with Conetenful's Delivery API https://contentful.com/developers
+Package contentful_go interactes with Conetenful's Delivery API https://contentful.com/developers
 */
 package contentful_go
 
@@ -10,31 +10,32 @@ import (
 	"net/http"
 )
 
-const baseUrl string = "https://cdn.contentful.com/"
+const baseURL string = "https://cdn.contentful.com/"
 
+// Contentful client class
 type Contentful struct {
-	spaceId, accessToken string
+	spaceID, accessToken string // configurations
 	client               *http.Client
 }
 
-// Creates contentful client
+// New Creates contentful client
 // Example:
 //  		client := contentful.New('SPACE_ID', 'DELIVERY_ACESS_TOKEN')
 //
-func New(spaceId, accessToken string) Contentful {
-	return Contentful{spaceId, accessToken, &http.Client{}}
+func New(spaceID, accessToken string) Contentful {
+	return Contentful{spaceID, accessToken, &http.Client{}}
 }
 
-// Gets an Entry
+// GetEntry Gets an Entry with the spcified ID
 // Example:
 //  		client := contentful.New("SPACE_ID", "ACCESS_TOKEN")
 //  		entry, _ := client.GetEntry("ENTRY_ID")
 //  		fmt.Printf("got entry with id %s", entry.Sys.Id)
 // It returns a pointer to an Entry object prefilled with response data
-func (c Contentful) GetEntry(entryId string, query map[string]string) (entry Entry, err error) {
+func (c Contentful) GetEntry(entryID string, query map[string]string) (entry Entry, err error) {
 	e := Entry{}
 	path := "spaces/%s/entries/%s"
-	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId, entryId), query)
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceID, entryID), query)
 	if err != nil {
 		return e, err
 	}
@@ -44,7 +45,7 @@ func (c Contentful) GetEntry(entryId string, query map[string]string) (entry Ent
 	return e, nil
 }
 
-// Gets a collection of entries
+// GetEntries Gets a collection of entries
 // Example:
 //  		client := contentful.New("SPACE_ID", "ACCESS_TOKEN")
 //  		entries, _ := client.GetEntries()
@@ -52,7 +53,7 @@ func (c Contentful) GetEntry(entryId string, query map[string]string) (entry Ent
 func (c Contentful) GetEntries(query map[string]string) (entriesCollection Collection, err error) {
 	ec := Collection{}
 	path := "spaces/%s/entries/"
-	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId), query)
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceID), query)
 	if err != nil {
 		return ec, err
 	}
@@ -62,7 +63,7 @@ func (c Contentful) GetEntries(query map[string]string) (entriesCollection Colle
 	return ec, nil
 }
 
-// Gets a collection of contentTypes
+// GetContentTypes Gets a collection of contentTypes
 // Example:
 //  		client := contentful.New("SPACE_ID", "ACCESS_TOKEN")
 //  		contentTypes, _ := client.GetContentTypes()
@@ -70,7 +71,7 @@ func (c Contentful) GetEntries(query map[string]string) (entriesCollection Colle
 func (c Contentful) GetContentTypes(query map[string]string) (contentTypesCollection Collection, err error) {
 	ctc := Collection{}
 	path := "spaces/%s/content_types/"
-	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId), query)
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceID), query)
 	if err != nil {
 		return ctc, err
 	}
@@ -80,15 +81,15 @@ func (c Contentful) GetContentTypes(query map[string]string) (contentTypesCollec
 	return ctc, nil
 }
 
-// Gets a ContentType
+// GetContentType Gets a ContentType
 // Example:
 //  		client := contentful.New("SPACE_ID", "ACCESS_TOKEN")
 //  		contentType, _ := client.GetContentType("contentTypeId")
 //  		fmt.Printf("got entry with id %s", contentType.Sys.Id)
-func (c Contentful) GetContentType(contentTypeId string, query map[string]string) (contentType ContentType, err error) {
+func (c Contentful) GetContentType(contentTypeID string, query map[string]string) (contentType ContentType, err error) {
 	ct := ContentType{}
 	path := "spaces/%s/content_types/%s"
-	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId, contentTypeId), query)
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceID, contentTypeID), query)
 	if err != nil {
 		return ct, err
 	}
@@ -98,7 +99,7 @@ func (c Contentful) GetContentType(contentTypeId string, query map[string]string
 	return ct, nil
 }
 
-// Gets a Space
+// GetSpace Gets a Space
 // Example:
 //  		client := contentful.New("SPACE_ID", "ACCESS_TOKEN")
 //  		space, _ := client.GetSpace("spaceId")
@@ -106,7 +107,7 @@ func (c Contentful) GetContentType(contentTypeId string, query map[string]string
 func (c Contentful) GetSpace(query map[string]string) (space Space, err error) {
 	s := Space{}
 	path := "spaces/%s/"
-	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceId), query)
+	body, err := c.performRequest("GET", fmt.Sprintf(path, c.spaceID), query)
 	if err != nil {
 		return s, err
 	}
@@ -117,10 +118,11 @@ func (c Contentful) GetSpace(query map[string]string) (space Space, err error) {
 }
 
 // utils methods =================================================================================
+
 func (c Contentful) makeRequest(method, path string) (request *http.Request, err error) {
-	req, err := http.NewRequest(method, baseUrl+"/"+path, nil)
+	req, err := http.NewRequest(method, baseURL+"/"+path, nil)
 	if err != nil {
-		return nil, fmt.Errorf("error making request: ", err)
+		return nil, fmt.Errorf("error making request: %v", err)
 	}
 
 	req.Header.Set("Authorization", "Bearer "+c.accessToken)
@@ -128,6 +130,7 @@ func (c Contentful) makeRequest(method, path string) (request *http.Request, err
 	req.Header.Set("X-Contentful-User-Agent", "contentful.go/1.0") // hardcoded for now
 	return req, nil
 }
+
 func (c Contentful) performRequest(method, path string, query map[string]string) (bytes []byte, err error) {
 	req, err := c.makeRequest(method, path)
 	if query != nil && len(query) > 0 {
@@ -142,6 +145,10 @@ func (c Contentful) performRequest(method, path string, query map[string]string)
 	if err != nil {
 		return nil, fmt.Errorf("performing request %v", err)
 	}
+	// if not 200 OK or 300 Not Modified --> error
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNotModified {
+		return nil, c.parseError(*resp)
+	}
 	defer resp.Body.Close()
 	bodyData, err := ioutil.ReadAll(resp.Body)
 
@@ -149,4 +156,7 @@ func (c Contentful) performRequest(method, path string, query map[string]string)
 		return nil, err
 	}
 	return bodyData, nil
+}
+func (c Contentful) parseError(resp http.Response) (error Error) {
+	return Error{}
 }

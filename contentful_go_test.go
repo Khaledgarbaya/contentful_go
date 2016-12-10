@@ -1,44 +1,43 @@
 package contentful_go
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 )
 
 func TestGetEntry(t *testing.T) {
-	var entryId string = "nyancat"
+	entryID := "nyancat"
 	client := createClient()
-	entry, err := client.GetEntry(entryId, nil)
+	entry, err := client.GetEntry(entryID, nil)
 	if err != nil {
-		t.Error(fmt.Sprintf("expected err == nil got %v", err))
+		t.Errorf("expected err == nil got %v", err)
 	}
-	if !strings.EqualFold(entry.Sys.Id, entryId) {
-		t.Error(fmt.Sprintf("Expected %s got %s", entryId, entry.Sys.Id))
+	if !strings.EqualFold(entry.Sys.Id, entryID) {
+		t.Errorf("Expected %s got %s", entryID, entry.Sys.Id)
 		t.Fail()
 	}
 }
 func TestGetSpace(t *testing.T) {
-	var spaceId string = "cfexampleapi"
+	spaceID := "cfexampleapi"
 	client := createClient()
 	space, err := client.GetSpace(nil)
 	if err != nil {
-		t.Error(fmt.Sprintf("expected err == nil got %v", err))
+		t.Errorf("expected err == nil got %v", err)
 	}
-	if !strings.EqualFold(space.Sys.Id, spaceId) {
-		t.Error(fmt.Sprintf("Expected %s got %s", spaceId, space.Sys.Id))
+	if !strings.EqualFold(space.Sys.Id, spaceID) {
+		t.Errorf("Expected %s got %s", spaceID, space.Sys.Id)
 		t.Fail()
 	}
 }
 func TestGetContentType(t *testing.T) {
-	var contentTypeId string = "cat"
+	contentTypeID := "cat"
 	client := createClient()
-	contentType, err := client.GetContentType(contentTypeId, nil)
+	contentType, err := client.GetContentType(contentTypeID, nil)
 	if err != nil {
-		t.Error(fmt.Sprintf("expected err == nil got %v", err))
+		t.Errorf("expected err == nil got %v", err)
 	}
-	if !strings.EqualFold(contentType.Sys.Id, contentTypeId) {
-		t.Error(fmt.Sprintf("Expected %s got %s", contentTypeId, contentType.Sys.Id))
+	if !strings.EqualFold(contentType.Sys.Id, contentTypeID) {
+		t.Errorf("Expected %s got %s", contentTypeID, contentType.Sys.Id)
 		t.Fail()
 	}
 }
@@ -46,7 +45,7 @@ func TestGetEntries(t *testing.T) {
 	client := createClient()
 	entities, err := client.GetEntries(nil)
 	if err != nil {
-		t.Error(fmt.Sprintf("expected err == nil got %v", err))
+		t.Errorf("expected err == nil got %v", err)
 	}
 	if len(entities.Items) == 0 {
 		t.Fail()
@@ -56,7 +55,7 @@ func TestGetContentTypes(t *testing.T) {
 	client := createClient()
 	contentTypes, err := client.GetContentTypes(nil)
 	if err != nil {
-		t.Error(fmt.Sprintf("expected err == nil got %v", err))
+		t.Errorf("expected err == nil got %v", err)
 	}
 	if len(contentTypes.Items) == 0 {
 		t.Fail()
