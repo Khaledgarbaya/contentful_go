@@ -1,11 +1,7 @@
 # contentful.go
 contetnful sdk client built on top of golang
 
-## This is not an official SDK, I built it to learn the GO programming Language
-
-## DO NOT USE THIS FOR PRODUCTION 
-
-## SUPER EXPERIMENTAL 
+## This is unofficial SDK, I built it to learn the GO programming Language DO NOT USE THIS FOR PRODUCTION 
 
 # About
 
